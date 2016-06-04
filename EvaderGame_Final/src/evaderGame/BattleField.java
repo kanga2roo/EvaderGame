@@ -22,11 +22,13 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 {
 	
 	private Hero hero;
-
+	private Enemy one;
 	private Backgrounds backed;
 	
 	private boolean[] keys;
 	private BufferedImage back;
+	
+	private int enemybuffer;
 
 	public BattleField()
 	{
@@ -37,11 +39,16 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 
 		backed = new Backgrounds();
 		
+		one = new Enemy();
+		one.setSpeed(1);
+		one.setDrawn(0);
+		
 		hero = new Hero();
 		hero.setPos(400, 300);
 		hero.setSpeed(2);
 		hero.setDrawn(3);
 
+		enemybuffer = 10;
 
 		this.addKeyListener(this);
 		new Thread(this).start();
@@ -95,10 +102,11 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			hero.setDrawn(0);
 			hero.setImage();
 			hero.draw(window);
+			
 		}
 
 		//add code to move stuff
-		else if(keys[1] == true)
+		 if(keys[1] == true)
 		{
 			hero.setDrawn(4);
 			hero.setImage();
@@ -108,7 +116,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			hero.setImage();
 			hero.draw(window);
 		}
-		else if(keys[2] == true)
+		 if(keys[2] == true)
 		{
 			hero.setDrawn(4);
 			hero.setImage();
@@ -118,7 +126,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			hero.setImage();
 			hero.draw(window);
 		}
-		else if(keys[3] == true)
+		if(keys[3] == true)
 		{
 			hero.setDrawn(4);
 			hero.setImage();
@@ -149,11 +157,33 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			hero.setPos(hero.getX(), (600-70));
 		}
 		//twoDGraph.drawImage(back, null, 0, 0);
-				
+		
+		
+		//drawing enemies
+		int countdown = 6;
+		
+	
+			
+		one.setDrawn(1);	
+		one.draw(window);
+		
+			if(one.x>one.y && enemybuffer == 10){
+				one.setDrawn(1);
+				one.draw(window);
+				one.setDrawn(0);
+				one.move("DOWN");
+				enemybuffer-=10;
+			}
+			if(one.y>one.x && enemybuffer == 0){
+				one.move("RIGHT");
+				enemybuffer+=10;
+			}
+			countdown--;
+		
 		
 	}
 
-
+	
 	public void keyPressed(KeyEvent e)
 	{
 		if (e.getKeyCode() == KeyEvent.VK_LEFT)
@@ -176,7 +206,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		{
 			keys[4] = true;
 		}
-		repaint();
+		//repaint();
 	}
 
 	public void keyReleased(KeyEvent e)
@@ -201,7 +231,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		{
 			keys[4] = false;
 		}
-		repaint();
+		//repaint();
 	}
 
 	public void keyTyped(KeyEvent e)
