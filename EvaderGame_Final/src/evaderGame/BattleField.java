@@ -80,17 +80,61 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			balls.get(i).draw(window);
 
 			if(hero.getX()>=balls.get(i).getX()
-					&& hero.getX()+20<=balls.get(i).getX()+50){
+					&& hero.getX()+20<=balls.get(i).getX()+60
+					&& hero.getY()>=balls.get(i).getY()
+					&& hero.getY()+25<=balls.get(i).getY()+60){
 				score = 0;
 			}
+			
+			//see if the ball hits the left or right wall 
+			if(!(balls.get(i).getX()>=0 && balls.get(i).getX()<=800))
+			{ 
+				balls.get(i).setXSpeed(-balls.get(i).getXSpeed());
+			}
+
+			//see if the ball hits the top or bottom wall 
+			if(!(balls.get(i).getY()>=0 && balls.get(i).getY()<=600))
+			{
+				balls.get(i).setYSpeed(-balls.get(i).getYSpeed());
+			}
+
 		}
+		
+
 		scorePaint(window);
+
 	}
 
 	public void paint( Graphics window )
 	{
 		final Ball ball = new Ball();
 
+		backed.setImage();
+		backed.draw(window);
+
+
+		//set up the double buffering to make the game animation nice and smooth
+		Graphics2D twoDGraph = (Graphics2D)window;
+
+		//take a snap shop of the current screen and same it as an image
+		//that is the exact same width and height as the current screen
+		if(back==null)
+			back = (BufferedImage)(createImage(getWidth(),getHeight()));
+
+		//create a graphics reference to the back ground image
+		//we will draw all changes on the background image
+		Graphics graphToBack = back.createGraphics();
+
+		graphToBack.setColor(Color.YELLOW);
+		graphToBack.drawString("EVADE THE ENEMIES ", 25, 50);
+		graphToBack.setColor(Color.BLACK);
+		graphToBack.fillRect(0,0,800,600);
+		
+
+		hero.setImage();
+		hero.draw(window);
+		
+		ball.moveAndDraw(graphToBack);
 		if(enemybuffer==0){
 			int rand = (int)(2*(Math.random()));
 			if(rand == 0){
@@ -111,45 +155,13 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			ball.setXSpeed(x1);
 			ball.setYSpeed(y1);
 			balls.add(ball);
-			ball.moveAndDraw(window);
+			ball.moveAndDraw(graphToBack);
 			score ++;
 			enemybuffer = 200;
 		}
-
-
-		backed.setImage();
-		backed.draw(window);
-
-		hero.setImage();
-		hero.draw(window);
-
-		ball.moveAndDraw(window);
-
-
-		while(instruction>0){
-			window.setColor(Color.CYAN);
-			window.drawString("Dodge the Enemies!", 400, 300);
-			instruction--;
-		}
-
-
-		//set up the double buffering to make the game animation nice and smooth
-		Graphics2D twoDGraph = (Graphics2D)window;
-
-		//take a snap shop of the current screen and same it as an image
-		//that is the exact same width and height as the current screen
-		if(back==null)
-			back = (BufferedImage)(createImage(getWidth(),getHeight()));
-
-		//create a graphics reference to the back ground image
-		//we will draw all changes on the background image
-		Graphics graphToBack = back.createGraphics();
-
-		graphToBack.setColor(Color.YELLOW);
-		graphToBack.drawString("EVADE THE ENEMIES ", 25, 50);
-		graphToBack.setColor(Color.BLACK);
-		graphToBack.fillRect(0,0,800,600);
-
+		
+		
+		
 		if(keys[0] == true)
 		{
 			//int delX = hero.getX();
@@ -158,11 +170,11 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			recFill.setBounds(delX, delY, 20, 25);*/
 			hero.setDrawn(4);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 			hero.move("LEFT");
 			hero.setDrawn(0);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 		}
 
 		//add code to move stuff
@@ -170,31 +182,31 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		{
 			hero.setDrawn(4);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 			hero.move("RIGHT");
 			hero.setDrawn(1);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 		}
 		if(keys[2] == true)
 		{
 			hero.setDrawn(4);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 			hero.move("UP");
 			hero.setDrawn(2);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 		}
 		if(keys[3] == true)
 		{
 			hero.setDrawn(4);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 			hero.move("DOWN");
 			hero.setDrawn(3);
 			hero.setImage();
-			hero.draw(window);
+			hero.draw(graphToBack);
 		}
 		if(keys[4] == true)
 		{
@@ -216,20 +228,6 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			hero.setPos(hero.getX(), (600-70));
 		}
 		//twoDGraph.drawImage(back, null, 0, 0);
-
-
-		//see if the ball hits the left or right wall 
-		if(!(ball.getX()>=0 && ball.getX()<=800))
-		{ 
-			ball.setXSpeed(-ball.getXSpeed());
-		}
-
-		//see if the ball hits the top or bottom wall 
-		if(!(ball.getY()>=0 && ball.getY()<=600))
-		{
-			ball.setYSpeed(-ball.getYSpeed());
-		}
-
 
 
 
@@ -312,9 +310,12 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 	public void scorePaint(Graphics window){
 
 		String str = new String();
-		str = "Survival Score == "+score;
-		window.drawString(str, 100, 100);
-		
+		str = "Dodge the Enemies!";
+		String str2 = new String();
+		str2 = "Survival Score == "+score;
+		window.drawString(str, 10, 20);
+		window.drawString(str2, 10, 40);
+		window.drawRect(0, 0, 120, 50);
 	}
 	
 	public void keyTyped(KeyEvent e){}
