@@ -1,0 +1,43 @@
+package evaderGame;
+
+public class Balls {
+
+	private Ball[] balls;
+
+	public Balls()
+	{
+		setBalls(0);
+	}
+
+	public Balls(int size)
+	{
+		balls = new Ball[size];
+	}
+	
+	public void setBalls(int size)
+	{
+		//size the array
+		balls = new Ball[size];
+		
+	}
+	
+	public void add(int spot, Ball m)
+	{
+		//put m in the Monster array at [spot]
+
+		balls[spot] = m;
+	}
+	
+	public Ball get(int spot)
+	{
+		return balls[spot];
+	}
+
+	
+
+	public String toString()
+	{
+
+	}
+}
+
