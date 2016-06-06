@@ -1,6 +1,7 @@
 package evaderGame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -87,13 +88,13 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			}
 			
 			//see if the ball hits the left or right wall 
-			if(!(balls.get(i).getX()>=0 && balls.get(i).getX()<=800))
+			if(!(balls.get(i).getX()>=0 && balls.get(i).getX()<=750))
 			{ 
 				balls.get(i).setXSpeed(-balls.get(i).getXSpeed());
 			}
 
 			//see if the ball hits the top or bottom wall 
-			if(!(balls.get(i).getY()>=0 && balls.get(i).getY()<=600))
+			if(!(balls.get(i).getY()>=0 && balls.get(i).getY()<=550))
 			{
 				balls.get(i).setYSpeed(-balls.get(i).getYSpeed());
 			}
@@ -309,6 +310,9 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 
 	public void scorePaint(Graphics window){
 
+		Font fnt = new Font("ariel", Font.BOLD, 12);
+		window.setFont(fnt);
+		window.setColor(Color.white);
 		String str = new String();
 		str = "Dodge the Enemies!";
 		String str2 = new String();

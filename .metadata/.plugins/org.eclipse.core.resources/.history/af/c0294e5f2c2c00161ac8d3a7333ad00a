@@ -13,14 +13,12 @@ public class EvaderGame extends JFrame
 		super("Hero's Evasion Challenge");
 		setSize(WIDTH,HEIGHT);
 
-		/*Menu intro = new Menu();
+		Menu intro = new Menu();
 		((Component)intro).setFocusable(true);
 
 		getContentPane().add(intro);
 
 		setVisible(true);
-		
-		*/
 		
 		BattleField theGame = new BattleField();
 		((Component)theGame).setFocusable(true);
