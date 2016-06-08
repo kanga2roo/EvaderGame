@@ -14,8 +14,6 @@ public class Ball extends Block
 		xSpeed = 3;
 		ySpeed = 1;
 	}
-
-	//add the other Ball constructors
 	
 	public Ball(int x, int y){
 		super(x,y,0,0);
@@ -64,8 +62,8 @@ public class Ball extends Block
  public void moveAndDraw(Graphics window)
  {
  	//draw a white ball at old ball location
-	   super.draw(window, Color.WHITE);
-	   setColor(Color.BLUE);
+	  // super.draw(window, Color.WHITE);
+	   //setColor(Color.BLUE);
 	   setX(getX()+xSpeed);
 	   setY(getY()+ySpeed);
 	   super.draw(window, randomColor());
@@ -77,40 +75,6 @@ public class Ball extends Block
 	   //super.draw(window, rand);
     
  }
- 
- 
-	
-	//Collidable implemented
-	
-		public boolean didCollideLeft(Object obj){
-			Block other = (Block) obj;
-			if(getX()<=other.getX()){
-				return true;
-			}
-			else{return false;}
-		}
-		public boolean didCollideRight(Object obj){
-			Block other = (Block) obj;
-			if(getX()<=other.getX()){
-				return true;
-			}
-			else{return false;}
-		}
-	    public boolean didCollideTop(Object obj){
-			Block other = (Block) obj;
-			if(getY()<=other.getY()){
-				return true;
-			}
-			else{return false;}
-	    }
-		public boolean didCollideBottom(Object obj){
-			Block other = (Block) obj;
-			if(getY()>=other.getY()){
-				return true;
-			}
-			else{return false;}
-		}
-		
 		
 	@Override
 	public String toString() {
@@ -119,7 +83,4 @@ public class Ball extends Block
 				+ ySpeed;
 	}   
 
- //add the get methods
-
- //add a toString() method
 }

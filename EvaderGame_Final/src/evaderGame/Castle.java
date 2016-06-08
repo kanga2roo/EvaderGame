@@ -2,11 +2,16 @@ package evaderGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class Castle extends Block
 {
 	private int xSpeed;
 	private int ySpeed;
+	private Image missile;
 
 	public Castle()
 	{
@@ -35,10 +40,36 @@ public class Castle extends Block
  
 	 public Color randomColor()
 	   {
-	 	return new Color(50,0,0);
-		 //return new Color(0,0,0,0);
+	 	//return new Color(50,0,0);
+		return new Color(0,0,0,0);
 	   }
 	
+	 public void shootMissile(Graphics window){
+		 
+		 try{
+				missile = ImageIO.read(new File("src/evaderGame/master_sword.png"));
+			}
+			catch(Exception e){}
+		 int x = 0;
+		 int location = 0;
+		 location = (int)(4*Math.random());
+		 if(location == 0){
+			 x = 235;
+		 }
+		 else if(location == 1){
+			 x = 335;
+		 }
+		 else if(location == 2){
+			 x = 465;
+		 }
+		 else if(location == 3){
+			 x = 565;
+		 }
+		 window.drawImage(missile, x, 140, null);
+
+	}
+	 	
+
 		
 		
 	@Override

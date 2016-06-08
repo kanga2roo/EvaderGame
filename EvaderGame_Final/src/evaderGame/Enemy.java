@@ -12,22 +12,20 @@ public class Enemy extends MovingThing
 	private Image image;
 	public int x = 0;
 	public int y = 0;
-	
+
 	private int enemyDraw;
 
-	
-	
+
+
 	public Enemy()
 	{
 		if(enemyDraw == 0){
-		try
-		{
-			image = ImageIO.read(new File("src/evaderGame/mush.png"));
-		}
-		catch(Exception e)
-		{
-			//feel free to do something here
-		}
+			try
+			{
+				image = ImageIO.read(new File("src/evaderGame/mush.png"));
+			}
+			catch(Exception e)
+			{		}
 		}
 		else if(enemyDraw == 1){
 			try{
@@ -48,13 +46,13 @@ public class Enemy extends MovingThing
 
 	public int getSpeed()
 	{
-	   return speed;
+		return speed;
 	}
-	
+
 	public void delete(Graphics window){
 		window.drawRect(getX(), getY(), 80, 80);
 	}
-	
+
 	public void coordinateSet(){
 		int rand = (int)(2*(Math.random()));
 		if(rand == 0){
@@ -66,7 +64,7 @@ public class Enemy extends MovingThing
 			y = (int)(600*Math.random());
 		}
 	}
-	
+
 	public void draw( Graphics window )
 	{
 		coordinateSet();
@@ -78,5 +76,5 @@ public class Enemy extends MovingThing
 		return "";
 	}
 
-	
+
 }

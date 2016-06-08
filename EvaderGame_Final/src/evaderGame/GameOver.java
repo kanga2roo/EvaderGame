@@ -1,176 +1,176 @@
 package evaderGame;
 
-	import java.awt.Canvas;
-	import java.awt.Color;
-	import java.awt.Component;
-	import java.awt.Font;
-	import java.awt.Graphics;
-	import java.awt.event.KeyEvent;
-	import java.awt.event.KeyListener;
-	import java.awt.image.BufferedImage;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
-	public class GameOver extends Canvas implements KeyListener, Runnable {
+public class GameOver extends Canvas implements KeyListener, Runnable {
 
-		private boolean[] keys;
-		private BufferedImage back;
-		boolean on;
-		private int highscore;
-		
-		public GameOver()
+	private boolean[] keys;
+	private BufferedImage back;
+	boolean on;
+	private int highscore;
+
+	public GameOver()
+	{
+		on = true;
+		setBackground(Color.red);
+
+		keys = new boolean[5];
+
+		this.addKeyListener(this);
+		new Thread(this).start();
+
+		setVisible(true);
+	}
+
+	public void highscoreGet(int input){
+		highscore = input;
+	}
+
+	public void update(Graphics window)
+	{
+		paint(window);
+		scorePaint(window);
+	}
+
+
+	public void paint( Graphics window ){
+		if(keys[4] == true)
 		{
-			on = true;
-			setBackground(Color.red);
+			on = false;
 
-			keys = new boolean[5];
+			setVisible(false);
 
-			this.addKeyListener(this);
-			new Thread(this).start();
-
-			setVisible(true);
 		}
-		
-		public void highscoreGet(int input){
-			highscore = input;
-		}
+	}
 
-		public void update(Graphics window)
+	public boolean onStart(){
+		if(on){
+			return true;
+		}
+		else {return false;}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT)
 		{
-			paint(window);
-			scorePaint(window);
+			keys[0] = true;
 		}
-		
-		
-		public void paint( Graphics window ){
-			if(keys[4] == true)
-			{
-				on = false;
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+		{
+			keys[1] = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_UP)
+		{
+			keys[2] = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN)
+		{
+			keys[3] = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_SPACE)
+		{
+			keys[4] = true;
+		}
+	}
 
-				setVisible(false);
-				
-			}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_LEFT)
+		{
+			keys[0] = false;
 		}
-		
-		public boolean onStart(){
-			if(on){
-				return true;
-			}
-			else {return false;}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+		{
+			keys[1] = false;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_UP)
+		{
+			keys[2] = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN)
+		{
+			keys[3] = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_SPACE)
+		{
+			keys[4] = false;
+		}
+	}
 
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_LEFT)
-			{
-				keys[0] = true;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-			{
-				keys[1] = true;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_UP)
-			{
-				keys[2] = true;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN)
-			{
-				keys[3] = true;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_SPACE)
-			{
-				keys[4] = true;
-			}
-		}
+	@Override
+	public void keyTyped(KeyEvent arg0) {}
 
-		@Override
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			if (e.getKeyCode() == KeyEvent.VK_LEFT)
-			{
-				keys[0] = false;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-			{
-				keys[1] = false;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_UP)
-			{
-				keys[2] = false;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN)
-			{
-				keys[3] = false;
-			}
-			if (e.getKeyCode() == KeyEvent.VK_SPACE)
-			{
-				keys[4] = false;
-			}
-		}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {}
-		
 	public void scorePaint(Graphics window){
-		
-			Font fnt = new Font("Ariel", Font.BOLD, 40);
-			window.setFont(fnt);
-			window.setColor(Color.white);
-			
-			String str2 = new String();
-			str2 = "GAME OVER";
-			window.drawString(str2, 260, 200);
-			
-			/*Font fnt6 = new Font("Ariel", Font.BOLD, 20);
+
+		Font fnt = new Font("Ariel", Font.BOLD, 40);
+		window.setFont(fnt);
+		window.setColor(Color.white);
+
+		String str2 = new String();
+		str2 = "GAME OVER";
+		window.drawString(str2, 260, 200);
+
+		/*Font fnt6 = new Font("Ariel", Font.BOLD, 20);
 			window.setFont(fnt6);
 			window.setColor(Color.white);
 			String str6 = new String();
 			str6 = "Your high score was "+highscore;
 			window.drawString(str6, 275, 250);*/
 
-			Font fnt1 = new Font("Ariel", Font.ITALIC, 20);
-			window.setFont(fnt1);
-			int r = (int) (255*Math.random());		
-	 		int g = (int) (255*Math.random());
-	 		int b = (int) (255*Math.random());
-	 		Color color = new Color(r,g,b);
-			window.setColor(color);
-			
-			String str3 = new String();
-			str3 = "Thanks for playing!";
-			window.drawString(str3, 290, 350);
-			
-			Font fnt2 = new Font("Ariel", Font.CENTER_BASELINE, 20);
-			window.setFont(fnt2);
-			window.setColor(Color.white);
-			
-			String str4 = new String();
-			str4 = "Press Space to exit";
-			window.drawString(str4, 290, 400);
-			
-			/*Font fnt3 = new Font("Ariel", Font.CENTER_BASELINE, 25);
+		Font fnt1 = new Font("Ariel", Font.ITALIC, 20);
+		window.setFont(fnt1);
+		int r = (int) (255*Math.random());		
+		int g = (int) (255*Math.random());
+		int b = (int) (255*Math.random());
+		Color color = new Color(r,g,b);
+		window.setColor(color);
+
+		String str3 = new String();
+		str3 = "Thanks for playing!";
+		window.drawString(str3, 290, 350);
+
+		Font fnt2 = new Font("Ariel", Font.CENTER_BASELINE, 20);
+		window.setFont(fnt2);
+		window.setColor(Color.white);
+
+		String str4 = new String();
+		str4 = "Press Space to exit";
+		window.drawString(str4, 290, 400);
+
+		/*Font fnt3 = new Font("Ariel", Font.CENTER_BASELINE, 25);
 			window.setFont(fnt3);
 			window.setColor(Color.white);
-			
+
 			String str5 = new String();
 			str5 = "Press Space to begin!";
 			window.drawString(str5, 235, 500);*/
 
-		}
-		
-		@Override
-		public void run() {
-			try
-			{
-				while(true)
-				{
-					Thread.currentThread().sleep(10);
-					repaint();
-				}
-			}catch(Exception e)
-			{
-			}		
-		}
-
-
 	}
+
+	@Override
+	public void run() {
+		try
+		{
+			while(true)
+			{
+				Thread.currentThread().sleep(10);
+				repaint();
+			}
+		}catch(Exception e)
+		{
+		}		
+	}
+
+
+}
 
 

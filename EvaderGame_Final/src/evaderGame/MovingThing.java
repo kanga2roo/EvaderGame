@@ -1,9 +1,4 @@
 package evaderGame;
-//© A+ Computer Science  -  www.apluscompsci.com
-//Name -
-//Date -
-//Class -
-//Lab  -
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,7 +10,6 @@ public abstract class MovingThing implements Locatable
 
 	public MovingThing()
 	{
-		//add more code
 	}
 
 	public MovingThing(int x, int y)
@@ -69,9 +63,7 @@ public abstract class MovingThing implements Locatable
 		  setY(getY()+getSpeed());
 		if(direction.equals("SPACE"))
 			setY(getY()-getSpeed());
-	
-      //add more code to complete the move method
-	}
+		}
 
 	public String toString()
 	{

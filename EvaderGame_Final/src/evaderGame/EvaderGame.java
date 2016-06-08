@@ -10,6 +10,7 @@ public class EvaderGame extends JFrame
 	private boolean menuCheck;
 	private boolean gameCheck;
 	private int scores;
+	
 
 
 	public EvaderGame()

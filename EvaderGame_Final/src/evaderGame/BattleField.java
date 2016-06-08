@@ -18,13 +18,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
-public class BattleField extends Canvas implements KeyListener, Runnable
+public class BattleField extends JPanel implements KeyListener, Runnable
 {
 
 	private Hero hero;
 	private Enemy one;
 	private Backgrounds backed;
+	private Castle castle;
 
 	private ArrayList <Ball> balls = new ArrayList<Ball>();
 	
@@ -45,6 +47,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 	private int score;
 	private int highscore;
 	private int heartCount;
+	
 
 	public BattleField()
 	{
@@ -52,6 +55,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		highscore = 0;
 		heartCount = 3;
 
+		castle = new Castle();
 		setBackground(Color.BLACK);
 		
 		try{
@@ -83,11 +87,95 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 	}
 
 
-	public void update(Graphics window)
+	public void repaint(Graphics window)
 	{
 		paint(window);
 
 		for(int i = 0; i<balls.size(); i++){
+			castle.shootMissile(window);
+
+			balls.get(i).moveAndDraw(window);
+			balls.get(i).draw(window);
+
+			//hits the left or right wall 
+			if(balls.get(i) != null && !(balls.get(i).getX()>=0 && balls.get(i).getX()<=750))
+			{ 
+				balls.get(i).setXSpeed(-balls.get(i).getXSpeed());
+			}
+
+			//hits the top or bottom wall 
+			if(!(balls.get(i).getY()>=0 && balls.get(i).getY()<=550))
+			{
+				balls.get(i).setYSpeed(-balls.get(i).getYSpeed());
+			}
+			
+			
+			if(hero.getX()>=balls.get(i).getX()
+					&& hero.getX()+20<=balls.get(i).getX()+60
+					&& hero.getY()>=balls.get(i).getY()
+					&& hero.getY()+25<=balls.get(i).getY()+60){
+				if(score>highscore){
+					highscore = score;
+				}
+				score = 0;
+				heartCount--;
+				balls.remove(i);
+			}
+			
+		}
+		
+		if(heartCount == 3){
+			window.drawImage(image, 730, 10, 35, 35, null);
+			window.drawImage(image, 700, 10, 35, 35, null);
+			window.drawImage(image, 670, 10, 35, 35, null);
+		}
+		else if(heartCount == 2){
+			window.drawImage(image, 700, 10, 35, 35, null);
+			window.drawImage(image, 670, 10, 35, 35, null);
+		}
+		else if(heartCount == 1){
+			window.drawImage(image, 670, 10, 35, 35, null);
+		}
+		else if(heartCount == 0){
+			setVisible(false);
+		}
+		
+		//scorePaint(window);
+		
+	}
+
+	public void paint( Graphics window )
+	{
+		final Ball ball = new Ball();
+
+		backed.setImage();
+		backed.draw(window);
+
+
+		Graphics2D twoDGraph = (Graphics2D)window;
+		if(back==null)
+			back = (BufferedImage)(createImage(getWidth(),getHeight()));
+		Graphics graphToBack = back.createGraphics();
+
+		graphToBack.setColor(Color.YELLOW);
+		graphToBack.drawString("EVADE THE ENEMIES ", 25, 50);
+		graphToBack.setColor(Color.BLACK);
+		graphToBack.fillRect(0,0,800,600);
+		
+		scorePaint(window);
+
+
+		hero.setImage();
+		hero.draw(window);
+		
+		castle.setPos(185, 0);
+		castle.setWidth(430);
+		castle.setHeight(140);
+		castle.setColor(castle.randomColor());
+		castle.draw(window);
+		
+		for(int i = 0; i<balls.size(); i++){
+
 			balls.get(i).moveAndDraw(window);
 			balls.get(i).draw(window);
 
@@ -134,43 +222,29 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			setVisible(false);
 		}
 		
-		scorePaint(window);
+		//scorePaint(window);
 		
-	}
-
-	public void paint( Graphics window )
-	{
-		final Ball ball = new Ball();
-
-		backed.setImage();
-		backed.draw(window);
-
-
-		//set up the double buffering to make the game animation nice and smooth
-		Graphics2D twoDGraph = (Graphics2D)window;
-
-		//take a snap shop of the current screen and same it as an image
-		//that is the exact same width and height as the current screen
-		if(back==null)
-			back = (BufferedImage)(createImage(getWidth(),getHeight()));
-
-		//create a graphics reference to the back ground image
-		//we will draw all changes on the background image
-		Graphics graphToBack = back.createGraphics();
-
-		graphToBack.setColor(Color.YELLOW);
-		graphToBack.drawString("EVADE THE ENEMIES ", 25, 50);
-		graphToBack.setColor(Color.BLACK);
-		graphToBack.fillRect(0,0,800,600);
+		//castle edge
+		if(hero.getX()>=185
+				&& 400-hero.getX()>0
+				&& hero.getY()<130){
+			hero.setPos(185, hero.getY());
+		}
+		else if(hero.getX()<=615
+				&& 400-hero.getX()<0
+				&& hero.getY()<130){
+			hero.setPos(615, hero.getY());
+		}
+		else if(hero.getY()<=141
+				&& hero.getX()>185
+				&& hero.getX()<615){
+			hero.setPos(hero.getX(), 141);
+		}
 		
-		scorePaint(graphToBack);
-
-
-		hero.setImage();
-		hero.draw(window);
 		
 		ball.moveAndDraw(graphToBack);
 		if(enemybuffer==0){
+
 			int rand = (int)(2*(Math.random()));
 			if(rand == 0){
 				x = (int)(800*Math.random());
@@ -192,6 +266,8 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			balls.add(ball);
 			ball.moveAndDraw(graphToBack);
 			score ++;
+			castle.shootMissile(window);
+		
 			enemybuffer = 200;
 		}
 		
@@ -211,8 +287,6 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			hero.setImage();
 			hero.draw(graphToBack);
 		}
-
-		//add code to move stuff
 		if(keys[1] == true)
 		{
 			hero.setDrawn(4);
@@ -248,8 +322,7 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		}
 
 
-		//add in collision detection with wall
-
+		//Collision detection with wall
 		if(hero.getX()<0){
 			hero.setPos(0, hero.getY());
 		}
@@ -265,13 +338,13 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		//twoDGraph.drawImage(back, null, 0, 0);
 
 
-		Ball back = new Ball();
+		/*Ball back = new Ball();
 		back.setPos(0, 0);
 		back.setHeight(70);
 		back.setWidth(140);
 		back.draw(window, Color.blue);
 		
-		
+		*/
 		enemybuffer--;
 
 		//drawing enemies
@@ -350,6 +423,8 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 
 	public void scorePaint(Graphics window){
 		
+		window.drawRect(0, 0, 140, 70);
+
 		Font fnt = new Font("cambria", Font.BOLD, 12);
 		window.setFont(fnt);
 		window.setColor(Color.white);
@@ -357,11 +432,10 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		str = "Dodge the Enemies!";
 		
 		window.drawString(str, 10, 20);
-		window.drawRect(0, 0, 140, 70);
-		/*Font fnt = new Font("cambria", Font.BOLD, 12);
-		window.setFont(fnt);
+		Font fnt1 = new Font("cambria", Font.BOLD, 12);
+		window.setFont(fnt1);
 		window.setColor(Color.white);
-		*/
+		
 		String str2 = new String();
 		str2 = "Survival Score == "+score;
 		window.drawString(str2, 10, 40);
@@ -369,9 +443,9 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		String str3 = new String();
 		str3 = "High Score == "+highscore;
 		window.drawString(str3, 10, 60);
-		String str4 = new String();
+		/*String str4 = new String();
 		str4 = "";
-		window.drawString(str4, 10, 80);
+		window.drawString(str4, 10, 80);*/
 	}
 	
 	public int getHighscore(){

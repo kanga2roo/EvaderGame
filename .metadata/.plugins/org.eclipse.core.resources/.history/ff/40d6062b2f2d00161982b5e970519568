@@ -1,0 +1,51 @@
+package evaderGame;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class Castle extends Block
+{
+	private int xSpeed;
+	private int ySpeed;
+
+	public Castle()
+	{
+		super(300,0,0,0);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+	
+	public Castle(int x, int y){
+		super(x,y,0,0);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+	public Castle(int x, int y, int w, int h){
+		super(x,y,w,h);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+	
+	public Castle(int x, int y, int w, int h, Color col){
+		super(x,y,w,h, col);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+
+ 
+	 public Color randomColor()
+	   {
+	 	//return new Color(50,0,0);
+		return new Color(0,0,0,0);
+	   }
+	
+		
+		
+	@Override
+	public String toString() {
+		return  super.toString()+ " "
+				+ xSpeed + " " 
+				+ ySpeed;
+	}   
+
+}

@@ -25,7 +25,6 @@ public class Balls {
 	
 	public void add(int spot, Ball m)
 	{
-		//put m in the Monster array at [spot]
 		balls.add(spot, m);
 	}
 	
