@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;EvaderGame_Final/src/evaderGame/146531908218869.png&apos; to &apos;heart.png&apos;" description="Rename resource &apos;146531908218869.png&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/evaderGame/146531908218869.png" name="heart.png" stamp="1465319380822" updateReferences="true"/>
+</session>

@@ -7,28 +7,47 @@ public class EvaderGame extends JFrame
 {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
+	private boolean menuCheck;
+	private boolean gameCheck;
+	private int scores;
+
 
 	public EvaderGame()
 	{
 		super("Hero's Evasion Challenge");
 		setSize(WIDTH,HEIGHT);
 
-		/*Menu intro = new Menu();
+		menuCheck = true;
+		gameCheck = true;
+		
+		Menu intro = new Menu();
 		((Component)intro).setFocusable(true);
-
 		getContentPane().add(intro);
-
 		setVisible(true);
+		menuCheck = intro.onStart();
 		
-		*/
+		if(menuCheck){
+			BattleField theGame = new BattleField();
+			((Component)theGame).setFocusable(true);
+			getContentPane().add(theGame);
+			setVisible(true);
+			
+			scores = theGame.getHighscore();
+			
+			GameOver finish = new GameOver();
+			//finish.highscoreGet(scores);
+			((Component)finish).setFocusable(true);
+			getContentPane().add(finish);
+			setVisible(true);
+			
+			if(!finish.onStart()){
+				gameCheck = false;
+			}
+		}
 		
-		BattleField theGame = new BattleField();
-		((Component)theGame).setFocusable(true);
-
-		getContentPane().add(theGame);
-
-		setVisible(true);
-		
+		if(!gameCheck){
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 		
 	}
 

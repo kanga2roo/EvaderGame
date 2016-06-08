@@ -1,0 +1,82 @@
+package evaderGame;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class Castle extends Block
+{
+	private int xSpeed;
+	private int ySpeed;
+
+	public Castle()
+	{
+		super(200,200,0,0);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+	
+	public Castle(int x, int y){
+		super(x,y,0,0);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+	public Castle(int x, int y, int w, int h){
+		super(x,y,w,h);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+	
+	public Castle(int x, int y, int w, int h, Color col){
+		super(x,y,w,h, col);
+		xSpeed = 0;
+		ySpeed = 0;
+	}
+
+ 
+	 public Color randomColor()
+	   {
+	 		return new Color(0,0,0,0);
+	   }
+	
+ 
+	
+	//Collidable implemented
+	
+		public boolean didCollideLeft(Object obj){
+			Block other = (Block) obj;
+			if(getX()<=other.getX()){
+				return true;
+			}
+			else{return false;}
+		}
+		public boolean didCollideRight(Object obj){
+			Block other = (Block) obj;
+			if(getX()<=other.getX()){
+				return true;
+			}
+			else{return false;}
+		}
+	    public boolean didCollideTop(Object obj){
+			Block other = (Block) obj;
+			if(getY()<=other.getY()){
+				return true;
+			}
+			else{return false;}
+	    }
+		public boolean didCollideBottom(Object obj){
+			Block other = (Block) obj;
+			if(getY()>=other.getY()){
+				return true;
+			}
+			else{return false;}
+		}
+		
+		
+	@Override
+	public String toString() {
+		return  super.toString()+ " "
+				+ xSpeed + " " 
+				+ ySpeed;
+	}   
+
+}

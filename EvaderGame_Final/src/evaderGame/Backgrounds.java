@@ -15,6 +15,7 @@ public class Backgrounds {
 	}
 	
 	public void setImage(){
+		
 		try{
 			image = ImageIO.read(new File("src/evaderGame/BACK1.png"));
 		}

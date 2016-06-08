@@ -27,6 +27,8 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 	private Backgrounds backed;
 
 	private ArrayList <Ball> balls = new ArrayList<Ball>();
+	
+	private Image image;
 
 	private int x;
 	private int y;
@@ -41,12 +43,21 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 	private int instruction;
 
 	private int score;
+	private int highscore;
+	private int heartCount;
 
 	public BattleField()
 	{
 		score = 0;
+		highscore = 0;
+		heartCount = 3;
 
 		setBackground(Color.BLACK);
+		
+		try{
+			image = ImageIO.read(new File("src/evaderGame/heart.png"));
+		}
+		catch(Exception e){}
 
 		keys = new boolean[5];
 
@@ -80,15 +91,8 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			balls.get(i).moveAndDraw(window);
 			balls.get(i).draw(window);
 
-			if(hero.getX()>=balls.get(i).getX()
-					&& hero.getX()+20<=balls.get(i).getX()+60
-					&& hero.getY()>=balls.get(i).getY()
-					&& hero.getY()+25<=balls.get(i).getY()+60){
-				score = 0;
-			}
-			
 			//see if the ball hits the left or right wall 
-			if(!(balls.get(i).getX()>=0 && balls.get(i).getX()<=750))
+			if(balls.get(i) != null && !(balls.get(i).getX()>=0 && balls.get(i).getX()<=750))
 			{ 
 				balls.get(i).setXSpeed(-balls.get(i).getXSpeed());
 			}
@@ -98,12 +102,40 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			{
 				balls.get(i).setYSpeed(-balls.get(i).getYSpeed());
 			}
-
+			
+			
+			if(hero.getX()>=balls.get(i).getX()
+					&& hero.getX()+20<=balls.get(i).getX()+60
+					&& hero.getY()>=balls.get(i).getY()
+					&& hero.getY()+25<=balls.get(i).getY()+60){
+				if(score>highscore){
+					highscore = score;
+				}
+				score = 0;
+				heartCount--;
+				balls.remove(i);
+			}
+			
 		}
 		
-
+		if(heartCount == 3){
+			window.drawImage(image, 730, 10, 35, 35, null);
+			window.drawImage(image, 700, 10, 35, 35, null);
+			window.drawImage(image, 670, 10, 35, 35, null);
+		}
+		else if(heartCount == 2){
+			window.drawImage(image, 700, 10, 35, 35, null);
+			window.drawImage(image, 670, 10, 35, 35, null);
+		}
+		else if(heartCount == 1){
+			window.drawImage(image, 670, 10, 35, 35, null);
+		}
+		else if(heartCount == 0){
+			setVisible(false);
+		}
+		
 		scorePaint(window);
-
+		
 	}
 
 	public void paint( Graphics window )
@@ -131,6 +163,8 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		graphToBack.setColor(Color.BLACK);
 		graphToBack.fillRect(0,0,800,600);
 		
+		scorePaint(graphToBack);
+
 
 		hero.setImage();
 		hero.draw(window);
@@ -141,14 +175,14 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 			if(rand == 0){
 				x = (int)(800*Math.random());
 				y = 0;	
-				x1 = 4;
-				y1 = 8;
+				x1 = 3;
+				y1 = 6;
 			}
 			else{
 				x = 0;
 				y = (int)(600*Math.random());
-				x1 = 8;
-				y1 = 4;
+				x1 = 6;
+				y1 = 3;
 			}	
 			ball.setPos(x, y);
 			ball.setHeight(50);
@@ -231,7 +265,13 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 		//twoDGraph.drawImage(back, null, 0, 0);
 
 
-
+		Ball back = new Ball();
+		back.setPos(0, 0);
+		back.setHeight(70);
+		back.setWidth(140);
+		back.draw(window, Color.blue);
+		
+		
 		enemybuffer--;
 
 		//drawing enemies
@@ -309,17 +349,33 @@ public class BattleField extends Canvas implements KeyListener, Runnable
 	}
 
 	public void scorePaint(Graphics window){
-
-		Font fnt = new Font("ariel", Font.BOLD, 12);
+		
+		Font fnt = new Font("cambria", Font.BOLD, 12);
 		window.setFont(fnt);
 		window.setColor(Color.white);
 		String str = new String();
 		str = "Dodge the Enemies!";
+		
+		window.drawString(str, 10, 20);
+		window.drawRect(0, 0, 140, 70);
+		/*Font fnt = new Font("cambria", Font.BOLD, 12);
+		window.setFont(fnt);
+		window.setColor(Color.white);
+		*/
 		String str2 = new String();
 		str2 = "Survival Score == "+score;
-		window.drawString(str, 10, 20);
 		window.drawString(str2, 10, 40);
-		window.drawRect(0, 0, 120, 50);
+
+		String str3 = new String();
+		str3 = "High Score == "+highscore;
+		window.drawString(str3, 10, 60);
+		String str4 = new String();
+		str4 = "";
+		window.drawString(str4, 10, 80);
+	}
+	
+	public int getHighscore(){
+		return highscore;
 	}
 	
 	public void keyTyped(KeyEvent e){}
